@@ -16,13 +16,13 @@ import java.util.List;
  */
 public class Control extends Thread {
     
-    private final static int NTHREADS = 2;
+    private final static int NTHREADS = 3;
     private final static int MAXVALUE = 30000000;
     private final static int TMILISECONDS = 5000;
 
     private final int NDATA = MAXVALUE / NTHREADS;
 
-    List<Integer> primes;
+    List<Integer> test;
 
     private PrimeFinderThread pft[];
     
@@ -30,14 +30,14 @@ public class Control extends Thread {
         super();
         this.pft = new PrimeFinderThread[NTHREADS];
 
-        this.primes = new LinkedList<>();
+        this.test = new LinkedList<>();
 
         int i;
         for(i = 0;i < NTHREADS - 1; i++) {
-            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, primes);
+            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, test);
             pft[i] = elem;
         }
-        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, primes);
+        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, test);
     }
     
     public static Control newControl() {

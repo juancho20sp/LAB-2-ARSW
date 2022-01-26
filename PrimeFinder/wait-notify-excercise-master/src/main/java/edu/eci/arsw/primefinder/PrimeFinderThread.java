@@ -9,11 +9,13 @@ public class PrimeFinderThread extends Thread{
 	Date date;
 
 
+	private List<Integer> test;
 	private List<Integer> primes;
 	
-	public PrimeFinderThread(int a, int b, int sleep, List<Integer> primes) {
+	public PrimeFinderThread(int a, int b, int sleep, List<Integer> test) {
 		super();
 		this.primes = primes;
+		this.test = test;
 		this.a = a;
 		this.b = b;
 		this.sleepTime = sleep;
@@ -50,7 +52,7 @@ public class PrimeFinderThread extends Thread{
 
 			for (int i= a;i < b;i++) {
 					if (isPrime(i)) {
-						synchronized (primes) {
+						synchronized (test) {
 							primes.add(i);
 						}
 						System.out.println(i);
@@ -67,7 +69,10 @@ public class PrimeFinderThread extends Thread{
 						System.out.println(" initialTime " + initialTime);
 						System.out.println("aiuda");
 						System.out.println("  ");
-						primes.wait();
+						synchronized (test){
+							test.wait();
+
+						}
 
 						//initialTime = new Date().getTime();
 
