@@ -1,3 +1,5 @@
+set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_25
+
 ### Escuela Colombiana de Ingeniería
 ## Arquitecturas de Software - ARSW
 
