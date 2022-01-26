@@ -1,32 +1,82 @@
-package edu.eci.arsw.primefinder;
+package main.java.edu.eci.arsw.primefinder;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class PrimeFinderThread extends Thread{
-
-	
 	int a,b;
-	
+	int sleepTime;
+	long initialTime;
+	Date date;
+
+
 	private List<Integer> primes;
 	
-	public PrimeFinderThread(int a, int b) {
+	public PrimeFinderThread(int a, int b, int sleep, List<Integer> primes) {
 		super();
-                this.primes = new LinkedList<>();
+		this.primes = primes;
 		this.a = a;
 		this.b = b;
+		this.sleepTime = sleep;
+
+		this.date = new Date();
+		this.initialTime = this.date.getTime();
 	}
 
-        @Override
+	@Override
 	public void run(){
-            for (int i= a;i < b;i++){						
-                if (isPrime(i)){
-                    primes.add(i);
-                    System.out.println(i);
-                }
-            }
+
+//            for (int i= a;i < b;i++){
+//                if (isPrime(i)){
+//                    primes.add(i);
+//                    System.out.println(i);
+//                }
+//            }
+		try{
+			count();
+		}catch (InterruptedException e){
+			System.out.println(e.getStackTrace());
+		}
+
+
 	}
-	
+
+	public void startWait() {
+
+	}
+
+
+	private void count() throws InterruptedException{
+			long initialTime = new Date().getTime();
+
+			for (int i= a;i < b;i++) {
+					if (isPrime(i)) {
+						synchronized (primes) {
+							primes.add(i);
+						}
+						System.out.println(i);
+						System.out.println("Size: " + primes.size());
+					}
+
+				System.out.println("initial time: " + initialTime);
+				System.out.println("actual time: " + new Date().getTime());
+				System.out.println("IF: " + (new Date().getTime() - initialTime));
+				Thread.sleep(1000);
+
+					if ((new Date().getTime() - initialTime) > this.sleepTime){
+
+						System.out.println(" initialTime " + initialTime);
+						System.out.println("aiuda");
+						System.out.println("  ");
+						primes.wait();
+
+						//initialTime = new Date().getTime();
+
+					}
+					//Thread.sleep(this.sleep);
+			}
+
+	}
+
 	boolean isPrime(int n) {
 	    boolean ans;
             if (n > 2) { 
