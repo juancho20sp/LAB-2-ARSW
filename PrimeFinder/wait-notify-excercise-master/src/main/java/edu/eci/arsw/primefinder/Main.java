@@ -11,6 +11,16 @@ public class Main {
         
         control.start();
 
+        while(true){
+            String myInput = scanner.next();
+            if(myInput.length() == 1){
+                control.rerun();
+            }
+        }
+
+
+
+
         /*while (true){
             String myInput = scanner.next();
 
