@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 import enums.GridSize;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -20,7 +23,7 @@ import javax.swing.JPanel;
 public class SnakeApp {
 
     private static SnakeApp app;
-    public static final int MAX_THREADS = 8;
+    public static final int MAX_THREADS = 1;
     Snake[] snakes = new Snake[MAX_THREADS];
     private static final Cell[] spawn = {
         new Cell(1, (GridSize.GRID_HEIGHT / 2) / 2),
@@ -56,6 +59,32 @@ public class SnakeApp {
         JPanel actionsBPabel=new JPanel();
         actionsBPabel.setLayout(new FlowLayout());
         actionsBPabel.add(new JButton("Action "));
+
+        // $
+        JButton startButton = new JButton("Iniciar");
+        startButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Iniciar clicked");
+            }
+        });
+        actionsBPabel.add(startButton);
+
+        JButton stopButton = new JButton("Pausar");
+        stopButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Pausar clicked");
+            }
+        });
+        actionsBPabel.add(stopButton);
+
+        JButton resumeButton = new JButton("Reanudar");
+        resumeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Reanudar clicked");
+            }
+        });
+        actionsBPabel.add(resumeButton);
+
         frame.add(actionsBPabel,BorderLayout.SOUTH);
 
     }
@@ -78,13 +107,20 @@ public class SnakeApp {
 
             
         while (true) {
-            int x = 0;
+            // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
+            // int x = 0;
+            AtomicInteger x = new AtomicInteger(0);
+
             for (int i = 0; i != MAX_THREADS; i++) {
                 if (snakes[i].isSnakeEnd() == true) {
-                    x++;
+                    // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
+                    // x++;
+                    x.getAndIncrement();
                 }
             }
-            if (x == MAX_THREADS) {
+            // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
+            // if (x == MAX_THREADS) {
+            if (x.get() == MAX_THREADS) {
                 break;
             }
         }

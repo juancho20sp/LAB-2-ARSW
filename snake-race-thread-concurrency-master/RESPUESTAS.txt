@@ -1,24 +1,29 @@
-COMPORTAMIENTO ALEATORIO DE LAS SERPIENTES:
-	- Se crean tantas serpientes como hilos se tengan (máx. 8).
-	- Se utiliza un patrón observador/observable entre el tablero y las serpientes.
-	- El turbo modifica la tasa de refresco de cada serpiente, haciéndola tres veces más corta cuando está activado.
-	- En fixDirection() verifica los bordes de la grilla: si el movimiento siguiente está dentro de la grilla,
-		se genera un movimiento aleatorio sobre la casilla siguiente con la función randomMovement(newCell).
-	- En randomMovement(newCell) la nueva dirección se obtiene a través de la generación de un número aleatorio entre 1 y 4
-		y se verifica que la dirección actual del movimiento NO sea opuesta a la nueva dirección.
-		- PROBLEMAS:
-			- En caso de darse esa situación de direcciones opuestas, no se está recalculando la dirección, así que
-				mantiene la dirección que lleve en ese momento.
-				- Parece ajustarse en la función changeDirection().
+INCISO 2:
+    COMPORTAMIENTO ALEATORIO DE LAS SERPIENTES:
+        - Se crean tantas serpientes como hilos se tengan (máx. 8).
+        - Se utiliza un patrón observador/observable entre el tablero y las serpientes.
+        - El turbo modifica la tasa de refresco de cada serpiente, haciéndola tres veces más corta cuando está activado.
+        - En fixDirection() verifica los bordes de la grilla: si el movimiento siguiente está dentro de la grilla,
+            se genera un movimiento aleatorio sobre la casilla siguiente con la función randomMovement(newCell).
+        - En randomMovement(newCell) la nueva dirección se obtiene a través de la generación de un número aleatorio entre 1 y 4
+            y se verifica que la dirección actual del movimiento NO sea opuesta a la nueva dirección.
+            - PROBLEMAS:
+                - En caso de darse esa situación de direcciones opuestas, no se está recalculando la dirección, así que
+                    mantiene la dirección que lleve en ese momento.
+                    - Parece ajustarse en la función changeDirection().
 
 
-CONDICIONES DE CARRERA:
-    - En el método init() de la clase SnakeApp tenemos una condición asociada a un hilo (snakes[i].isSnakeEnd() == true) que modifica
-		a la variable x sin sincronizarla de ninguna forma.
+    CONDICIONES DE CARRERA:
+        - En el método init() de la clase SnakeApp tenemos una condición asociada a un hilo (snakes[i].isSnakeEnd() == true) que modifica
+            a la variable x sin sincronizarla de ninguna forma.
 
-USO INADECUADO DE COLECCIONES:
-	- Cuando el juego aumenta su velocidad, muchas serpientes empiezan a aparecer por partes.
+    USO INADECUADO DE COLECCIONES:
+        - Cuando el juego aumenta su velocidad, muchas serpientes empiezan a aparecer por partes.
 
 
-USO INNECESARIO DE ESPERAS ACTIVAS:
-    - En algunas ocasiones, cuando el juego termina, hay serpientes cuyo estado final es TIMED_WAITING.
+    USO INNECESARIO DE ESPERAS ACTIVAS:
+        - En algunas ocasiones, cuando el juego termina, hay serpientes cuyo estado final es TIMED_WAITING.
+
+INCISO 3:
+    SOLUCIÓN A CONDICIONES DE CARRERA:
+        - Para esto se creó un AtomicInteger quien hará las veces de contador, buscando evitar que hayan peticiones simultáneas a la variable X.

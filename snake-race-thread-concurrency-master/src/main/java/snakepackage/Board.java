@@ -184,7 +184,9 @@ public class Board extends JLabel implements Observer {
 	private void drawSnake(Graphics g) {
 		for (int i = 0; i != SnakeApp.MAX_THREADS; i++) {
 			for (Cell p : SnakeApp.getApp().snakes[i].getBody()) {
-				if (p.equals(SnakeApp.getApp().snakes[i].getBody().peekFirst())) {
+				// $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
+				// if (p.equals(SnakeApp.getApp().snakes[i].getBody().peekFirst())) {
+				if (p.equals(SnakeApp.getApp().snakes[i].getBody().peek())) {
 					g.setColor(new Color(050+(i*10), 205, 150));
 					g.fillRect(p.getX() * GridSize.WIDTH_BOX, p.getY()
 							* GridSize.HEIGH_BOX, GridSize.WIDTH_BOX,

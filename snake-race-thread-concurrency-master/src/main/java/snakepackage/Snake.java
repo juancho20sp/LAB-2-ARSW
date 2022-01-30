@@ -3,6 +3,7 @@ package snakepackage;
 import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Random;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import enums.Direction;
 import enums.GridSize;
@@ -12,7 +13,9 @@ public class Snake extends Observable implements Runnable {
     private int idt;
     private Cell head;
     private Cell newCell;
+    // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
     private LinkedList<Cell> snakeBody = new LinkedList<Cell>();
+    //private LinkedBlockingQueue<Cell> snakeBody = new LinkedBlockingQueue<Cell>();
     //private Cell objective = null;
     private Cell start = null;
 
@@ -57,7 +60,7 @@ public class Snake extends Observable implements Runnable {
 
             try {
                 // $
-                int time = 50;
+                int time = 500;
 
                 if (hasTurbo == true) {
                     Thread.sleep(time / 3);
@@ -76,7 +79,9 @@ public class Snake extends Observable implements Runnable {
     }
 
     private void snakeCalc() {
+        // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
         head = snakeBody.peekFirst();
+        //head = snakeBody.peek();
 
         newCell = head;
 
@@ -88,12 +93,19 @@ public class Snake extends Observable implements Runnable {
         checkIfJumpPad(newCell);
         checkIfTurboBoost(newCell);
         checkIfBarrier(newCell);
-        
+
+        // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
         snakeBody.push(newCell);
+        //snakeBody.add(newCell);
 
         if (growing <= 0) {
+            // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
             newCell = snakeBody.peekLast();
+            //newCell = peekLast();
+
+            // $
             snakeBody.remove(snakeBody.peekLast());
+            //snakeBody.remove(newCell);
             Board.gameboard[newCell.getX()][newCell.getY()].freeCell();
         } else if (growing != 0) {
             growing--;
@@ -110,6 +122,14 @@ public class Snake extends Observable implements Runnable {
         }
     }
 
+    // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
+    private Cell peekLast() {
+        if(snakeBody == null){
+            throw new IllegalArgumentException();
+        }
+        Object[] array = snakeBody.toArray();
+        return (Cell)array[snakeBody.size() - 1];
+    }
     
     private Cell fixDirection(Cell newCell) {
 
@@ -330,7 +350,9 @@ public class Snake extends Observable implements Runnable {
         this.objective = c;
     }*/
 
+    // $ -> SOLUCIÓN USO INADECUADO DE COLECCIONES
     public LinkedList<Cell> getBody() {
+    // public LinkedBlockingQueue<Cell> getBody() {
         return this.snakeBody;
     }
 
