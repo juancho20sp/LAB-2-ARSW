@@ -50,6 +50,8 @@ public class Control extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Starting threads...");
+
         for(int i = 0;i < NTHREADS;i++ ) {
             pft[i].start();
 

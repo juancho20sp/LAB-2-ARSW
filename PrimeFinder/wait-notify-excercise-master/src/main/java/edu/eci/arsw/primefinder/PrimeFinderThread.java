@@ -6,7 +6,7 @@ public class PrimeFinderThread extends Thread{
 	int a,b;
 	int sleepTime;
 	long initialTime;
-	Date date;
+
 	private Object lock;
 	private List<Integer> listItems;
 	
@@ -17,9 +17,6 @@ public class PrimeFinderThread extends Thread{
 		this.a = a;
 		this.b = b;
 		this.sleepTime = sleep;
-
-		this.date = new Date();
-		//this.initialTime = this.date.getTime();
 	}
 
 	@Override
@@ -29,53 +26,26 @@ public class PrimeFinderThread extends Thread{
 		}catch (InterruptedException e){
 			System.out.println(e.getStackTrace());
 		}
-
-
 	}
 
 	private void count() throws InterruptedException{
-		System.out.println("  ---  running ---");
-		System.out.println("  ---  running ---");
-		System.out.println("  ---  running ---");
-
-			//long initialTime = new Date().getTime();
-
-			for (int i= a;i < b;i++) {
-					if (isPrime(i)) {
-						System.out.println(this.listItems);
-						// $
-						//this.listItems.add(i);
-						synchronized (lock) {
-							this.listItems.add(i);
-						}
-						System.out.println(i);
-						System.out.println("Size: " + this.listItems.size());
-					}
-
-				System.out.println("initial time: " + initialTime);
-				System.out.println("actual time: " + new Date().getTime());
-				System.out.println("IF: " + (new Date().getTime() - initialTime));
-				Thread.sleep(1000);
-
-					if ((new Date().getTime() - initialTime) > this.sleepTime){
-
-						System.out.println(" initialTime " + initialTime);
-						System.out.println("aiuda");
-						System.out.println("  ");
-
-
-
-						//this.synchronizedObject.wait();
-						synchronized (this.lock){
-							System.out.println("Hay un total de " + this.listItems.size() + " numeros primos en la lista: " + this.listItems);
-							this.lock.wait();
-						}
-
-						//initialTime = new Date().getTime();
-
-					}
-					//Thread.sleep(this.sleep);
+		for (int i= a;i < b;i++) {
+			if (isPrime(i)) {
+				synchronized (lock) {
+					this.listItems.add(i);
+				}
 			}
+
+			// Thread.sleep(1000);
+			System.out.println("Time elapsed: " + (new Date().getTime() - initialTime));
+
+			if ((new Date().getTime() - initialTime) > this.sleepTime){
+				synchronized (this.lock){
+					System.out.println("Hay un total de " + this.listItems.size() + " numeros primos en la lista: " + this.listItems + " Hay un total de "  + this.listItems.size() + " primos en la lista.");
+					this.lock.wait();
+				}
+			}
+		}
 
 	}
 
