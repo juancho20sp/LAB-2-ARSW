@@ -3,7 +3,7 @@ package snakepackage;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import enums.GridSize;
 import java.awt.BorderLayout;
@@ -13,8 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  * @author jd-
@@ -44,6 +42,10 @@ public class SnakeApp {
     // $
     private boolean isGameStarted = false;
     private final Object pauseLock = new Object();
+    private Snake longestSnake = null;
+    private Snake firstToDie = null;
+
+    private JPanel actionsBPabel = null;
 
     public SnakeApp() {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -60,7 +62,7 @@ public class SnakeApp {
         
         frame.add(board,BorderLayout.CENTER);
         
-        JPanel actionsBPabel=new JPanel();
+        this.actionsBPabel=new JPanel();
         actionsBPabel.setLayout(new FlowLayout());
         actionsBPabel.add(new JButton("Action "));
 
@@ -68,7 +70,6 @@ public class SnakeApp {
         JButton startButton = new JButton("Iniciar");
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Iniciar clicked");
                 startGame();
             }
         });
@@ -77,7 +78,6 @@ public class SnakeApp {
         JButton stopButton = new JButton("Pausar");
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Pausar clicked");
                 pauseGame();
             }
         });
@@ -86,7 +86,6 @@ public class SnakeApp {
         JButton resumeButton = new JButton("Reanudar");
         resumeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Reanudar clicked");
                 resumeGame();
             }
         });
@@ -113,7 +112,7 @@ public class SnakeApp {
 
         frame.setVisible(true);
 
-            
+        boolean isFirstDead = false;
         while (true) {
             // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
             // int x = 0;
@@ -124,6 +123,16 @@ public class SnakeApp {
                     // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
                     // x++;
                     x.getAndIncrement();
+
+                    if (!isFirstDead) {
+                        this.firstToDie = snakes[i];
+
+                        System.out.println(" ------------ ");
+                        System.out.println("La primera serpiente en morir es: " + this.firstToDie.getIdt());
+                        System.out.println(" ------------ ");
+
+                        isFirstDead = true;
+                    }
                 }
             }
             // $ -> ELIMINACIÓN DE ZONAS CRÍTICAS
@@ -158,6 +167,11 @@ public class SnakeApp {
         for (int i = 0; i != MAX_THREADS; i++) {
             snakes[i].pauseSnake();
         }
+
+        calculateLongestSnake();
+        System.out.println(" ------------ ");
+        System.out.println("Serpiente más larga: " + this.longestSnake.getBody().size());
+        System.out.println(" ------------ ");
     }
 
     // $
@@ -175,4 +189,30 @@ public class SnakeApp {
         return app;
     }
 
+    // $
+    private void calculateLongestSnake() {
+        Snake longest = null;
+        int size = -1;
+
+        for (int i = 0; i != MAX_THREADS; i++) {
+            if (snakes[i] != null && (snakes[i].getBody().size() > size)) {
+                size = snakes[i].getBody().size();
+                longest = snakes[i];
+            }
+        }
+
+        this.setLongestSnake(longest);
+    }
+
+    public Snake getLongestSnake() {
+        if (this.longestSnake != null) {
+            return longestSnake;
+        } else {
+            return null;
+        }
+    }
+
+    public void setLongestSnake(Snake longestSnake) {
+        this.longestSnake = longestSnake;
+    }
 }
