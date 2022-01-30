@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.java.edu.eci.arsw.primefinder;
+package edu.eci.arsw.primefinder;
 
 import javax.crypto.spec.PSource;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,22 +23,26 @@ public class Control extends Thread {
 
     private final int NDATA = MAXVALUE / NTHREADS;
 
-    List<Integer> test;
+    List<Integer> listItems;
+    List<Integer> synchronizedObject;
+    private final Object lock = new Object();
 
     private PrimeFinderThread pft[];
     
     private Control() {
         super();
+        this.synchronizedObject = new LinkedList<>();
+        this.listItems = new LinkedList<>();
         this.pft = new PrimeFinderThread[NTHREADS];
 
-        this.test = new LinkedList<>();
+
 
         int i;
         for(i = 0;i < NTHREADS - 1; i++) {
-            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, test);
+            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, lock);
             pft[i] = elem;
         }
-        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, test);
+        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, lock);
     }
     
     public static Control newControl() {
@@ -46,14 +51,24 @@ public class Control extends Thread {
 
     @Override
     public void run() {
-       // test.notifyAll();
         for(int i = 0;i < NTHREADS;i++ ) {
             pft[i].start();
+
+            // Set initial time on all threads
+            pft[i].setInitialTime(new Date().getTime());
         }
     }
 
     public void rerun(){
-        test.notifyAll();
+        synchronized (lock){
+            lock.notifyAll();
+
+            for(int i = 0;i < NTHREADS;i++ ) {
+                // Set initial time on all threads
+                pft[i].setInitialTime(new Date().getTime());
+            }
+        }
+
     }
 
     public void stopThreads(){

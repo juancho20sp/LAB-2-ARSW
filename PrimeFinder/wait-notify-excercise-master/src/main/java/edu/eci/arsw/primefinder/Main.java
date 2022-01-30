@@ -1,4 +1,4 @@
-package main.java.edu.eci.arsw.primefinder;
+package edu.eci.arsw.primefinder;
 
 
 import java.util.Scanner;
@@ -12,8 +12,10 @@ public class Main {
         control.start();
 
         while(true){
-            String myInput = scanner.next();
-            if(myInput.length() == 1){
+            String myInput = scanner.nextLine();
+
+            if(myInput.isEmpty()){
+                System.out.println("waiting for entering a letter");
                 control.rerun();
             }
         }

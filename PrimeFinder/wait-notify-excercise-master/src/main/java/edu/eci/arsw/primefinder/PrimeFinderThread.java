@@ -1,4 +1,4 @@
-package main.java.edu.eci.arsw.primefinder;
+package edu.eci.arsw.primefinder;
 
 import java.util.*;
 
@@ -9,30 +9,23 @@ public class PrimeFinderThread extends Thread{
 	Date date;
 
 
-	private List<Integer> test;
-	private List<Integer> primes;
+	private Object lock;
+	private List<Integer> listItems;
 	
-	public PrimeFinderThread(int a, int b, int sleep, List<Integer> test) {
+	public PrimeFinderThread(int a, int b, int sleep, Object lock) {
 		super();
-		this.primes = new LinkedList<>();
-		this.test = test;
+		this.listItems = new LinkedList<>();
+		this.lock = lock;
 		this.a = a;
 		this.b = b;
 		this.sleepTime = sleep;
 
 		this.date = new Date();
-		this.initialTime = this.date.getTime();
+		//this.initialTime = this.date.getTime();
 	}
 
 	@Override
 	public void run(){
-
-//            for (int i= a;i < b;i++){
-//                if (isPrime(i)){
-//                    primes.add(i);
-//                    System.out.println(i);
-//                }
-//            }
 		try{
 			count();
 		}catch (InterruptedException e){
@@ -42,22 +35,36 @@ public class PrimeFinderThread extends Thread{
 
 	}
 
+	public long getInitialTime() {
+		return initialTime;
+	}
+
+	public void setInitialTime(long initialTime) {
+		this.initialTime = initialTime;
+	}
+
 	public void startWait() {
 
 	}
 
 
 	private void count() throws InterruptedException{
-			long initialTime = new Date().getTime();
+		System.out.println("  ---  running ---");
+		System.out.println("  ---  running ---");
+		System.out.println("  ---  running ---");
+
+			//long initialTime = new Date().getTime();
 
 			for (int i= a;i < b;i++) {
 					if (isPrime(i)) {
-						System.out.println(primes);
-						synchronized (test) {
-							primes.add(i);
+						System.out.println(this.listItems);
+						// $
+						//this.listItems.add(i);
+						synchronized (lock) {
+							this.listItems.add(i);
 						}
 						System.out.println(i);
-						System.out.println("Size: " + primes.size());
+						System.out.println("Size: " + this.listItems.size());
 					}
 
 				System.out.println("initial time: " + initialTime);
@@ -70,9 +77,10 @@ public class PrimeFinderThread extends Thread{
 						System.out.println(" initialTime " + initialTime);
 						System.out.println("aiuda");
 						System.out.println("  ");
-						synchronized (test){
-							test.wait();
 
+						//this.synchronizedObject.wait();
+						synchronized (this.lock){
+							this.lock.wait();
 						}
 
 						//initialTime = new Date().getTime();
@@ -97,7 +105,7 @@ public class PrimeFinderThread extends Thread{
 	}
 
 	public List<Integer> getPrimes() {
-		return primes;
+		return this.listItems;
 	}
 	
 }
