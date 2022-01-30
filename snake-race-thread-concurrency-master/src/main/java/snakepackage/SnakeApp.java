@@ -65,6 +65,7 @@ public class SnakeApp {
         startButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Iniciar clicked");
+                startGame();
             }
         });
         actionsBPabel.add(startButton);
@@ -100,7 +101,8 @@ public class SnakeApp {
             snakes[i] = new Snake(i + 1, spawn[i], i + 1);
             snakes[i].addObserver(board);
             thread[i] = new Thread(snakes[i]);
-            thread[i].start();
+            // $
+            // thread[i].start();
         }
 
         frame.setVisible(true);
@@ -131,6 +133,21 @@ public class SnakeApp {
             System.out.println("["+i+"] :"+thread[i].getState());
         }
         
+
+    }
+
+    // $
+    private void startGame() {
+        for (int i = 0; i != MAX_THREADS; i++) {
+            thread[i].start();
+        }
+    }
+
+    // $
+    private void pauseGame() { }
+
+    // $
+    private void resumeGame() {
 
     }
 
