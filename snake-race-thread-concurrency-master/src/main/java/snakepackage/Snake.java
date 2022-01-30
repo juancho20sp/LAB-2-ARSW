@@ -30,11 +30,23 @@ public class Snake extends Observable implements Runnable {
     private int growing = 0;
     public boolean goal = false;
 
-    public Snake(int idt, Cell head, int direction) {
+    // $
+    private boolean isPaused = false;
+    private Object pauseLock = new Object();
+
+    public Snake(int idt, Cell head, int direction, Object pauseLock) {
         this.idt = idt;
         this.direction = direction;
+        this.pauseLock = pauseLock;
         generateSnake(head);
+    }
 
+    public void pauseSnake() {
+        this.isPaused = true;
+    }
+
+    public void resumeSnake() {
+        this.isPaused = false;
     }
 
     public boolean isSnakeEnd() {
@@ -59,6 +71,16 @@ public class Snake extends Observable implements Runnable {
             notifyObservers();
 
             try {
+                synchronized (pauseLock){
+                    try {
+                        if (this.isPaused){
+                            pauseLock.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 // $
                 int time = 500;
 

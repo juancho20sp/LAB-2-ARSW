@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 public class SnakeApp {
 
     private static SnakeApp app;
-    public static final int MAX_THREADS = 1;
+    public static final int MAX_THREADS = 8;
     Snake[] snakes = new Snake[MAX_THREADS];
     private static final Cell[] spawn = {
         new Cell(1, (GridSize.GRID_HEIGHT / 2) / 2),
@@ -40,6 +40,10 @@ public class SnakeApp {
     private static Board board;
     int nr_selected = 0;
     Thread[] thread = new Thread[MAX_THREADS];
+
+    // $
+    private boolean isGameStarted = false;
+    private final Object pauseLock = new Object();
 
     public SnakeApp() {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
@@ -74,6 +78,7 @@ public class SnakeApp {
         stopButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Pausar clicked");
+                pauseGame();
             }
         });
         actionsBPabel.add(stopButton);
@@ -82,6 +87,7 @@ public class SnakeApp {
         resumeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Reanudar clicked");
+                resumeGame();
             }
         });
         actionsBPabel.add(resumeButton);
@@ -98,7 +104,7 @@ public class SnakeApp {
     private void init() {
         for (int i = 0; i != MAX_THREADS; i++) {
             
-            snakes[i] = new Snake(i + 1, spawn[i], i + 1);
+            snakes[i] = new Snake(i + 1, spawn[i], i + 1, pauseLock);
             snakes[i].addObserver(board);
             thread[i] = new Thread(snakes[i]);
             // $
@@ -138,17 +144,31 @@ public class SnakeApp {
 
     // $
     private void startGame() {
-        for (int i = 0; i != MAX_THREADS; i++) {
-            thread[i].start();
+        if (!isGameStarted) {
+            for (int i = 0; i != MAX_THREADS; i++) {
+                thread[i].start();
+            }
+
+            this.isGameStarted = true;
         }
     }
 
     // $
-    private void pauseGame() { }
+    private void pauseGame() {
+        for (int i = 0; i != MAX_THREADS; i++) {
+            snakes[i].pauseSnake();
+        }
+    }
 
     // $
     private void resumeGame() {
+        for (int i = 0; i != MAX_THREADS; i++) {
+            snakes[i].resumeSnake();
+        }
 
+        synchronized (pauseLock) {
+            pauseLock.notifyAll();
+        }
     }
 
     public static SnakeApp getApp() {
