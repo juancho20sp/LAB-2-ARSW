@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Control extends Thread {
     
-    private final static int NTHREADS = 1;
+    private final static int NTHREADS = 4;
     private final static int MAXVALUE = 30000000;
     private final static int TMILISECONDS = 5000;
 
@@ -36,13 +36,12 @@ public class Control extends Thread {
         this.pft = new PrimeFinderThread[NTHREADS];
 
 
-
         int i;
         for(i = 0;i < NTHREADS - 1; i++) {
-            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, lock);
+            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, TMILISECONDS, lock, this.listItems);
             pft[i] = elem;
         }
-        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, lock);
+        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, TMILISECONDS, lock, this.listItems);
     }
     
     public static Control newControl() {

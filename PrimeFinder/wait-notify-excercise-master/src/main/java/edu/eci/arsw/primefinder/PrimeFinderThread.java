@@ -7,14 +7,12 @@ public class PrimeFinderThread extends Thread{
 	int sleepTime;
 	long initialTime;
 	Date date;
-
-
 	private Object lock;
 	private List<Integer> listItems;
 	
-	public PrimeFinderThread(int a, int b, int sleep, Object lock) {
+	public PrimeFinderThread(int a, int b, int sleep, Object lock, List<Integer> listItems) {
 		super();
-		this.listItems = new LinkedList<>();
+		this.listItems = listItems;
 		this.lock = lock;
 		this.a = a;
 		this.b = b;
@@ -34,19 +32,6 @@ public class PrimeFinderThread extends Thread{
 
 
 	}
-
-	public long getInitialTime() {
-		return initialTime;
-	}
-
-	public void setInitialTime(long initialTime) {
-		this.initialTime = initialTime;
-	}
-
-	public void startWait() {
-
-	}
-
 
 	private void count() throws InterruptedException{
 		System.out.println("  ---  running ---");
@@ -78,8 +63,11 @@ public class PrimeFinderThread extends Thread{
 						System.out.println("aiuda");
 						System.out.println("  ");
 
+
+
 						//this.synchronizedObject.wait();
 						synchronized (this.lock){
+							System.out.println("Hay un total de " + this.listItems.size() + " numeros primos en la lista: " + this.listItems);
 							this.lock.wait();
 						}
 
@@ -106,6 +94,14 @@ public class PrimeFinderThread extends Thread{
 
 	public List<Integer> getPrimes() {
 		return this.listItems;
+	}
+
+	public long getInitialTime() {
+		return initialTime;
+	}
+
+	public void setInitialTime(long initialTime) {
+		this.initialTime = initialTime;
 	}
 	
 }
