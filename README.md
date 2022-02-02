@@ -1,5 +1,3 @@
-set JAVA_HOME=C:\Program Files\Java\jdk1.8.0_25
-java -cp "target/classes/;target/dependency/*" edu.escuelaing.arem.App
 
 ### Escuela Colombiana de Ingeniería
 ## Arquitecturas de Software - ARSW
@@ -8,7 +6,6 @@ java -cp "target/classes/;target/dependency/*" edu.escuelaing.arem.App
 
 Ejercicio inividual o en parejas.
 
-### Part I
 
 ### Integrantes
 	Juan David Murillo Giraldo - 2172577
@@ -17,6 +14,7 @@ Ejercicio inividual o en parejas.
 ### Repositorio
 https://github.com/juancho20sp/LAB-2-ARSW
 
+### Part I
 
 Parte I – Antes de terminar la clase.
 
