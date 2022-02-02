@@ -17,8 +17,10 @@ import java.util.List;
  */
 public class Control extends Thread {
     
-    private final static int NTHREADS = 4;
+    private final static int NTHREADS = 2;
     private final static int MAXVALUE = 30000000;
+//    private final static int MAXVALUE = 20;
+
     private final static int TMILISECONDS = 5000;
 
     private final int NDATA = MAXVALUE / NTHREADS;
@@ -60,17 +62,24 @@ public class Control extends Thread {
         }
     }
 
-    public void rerun(){
+    public boolean rerun(){
+        System.out.println("Total size: " + this.listItems.size());
+        for(int i = 0;i < NTHREADS;i++ ) {
+            // Set initial time on all threads
+            pft[i].setInitialTime(new Date().getTime());
+        }
         synchronized (lock){
             lock.notifyAll();
-
-            for(int i = 0;i < NTHREADS;i++ ) {
-                // Set initial time on all threads
-                pft[i].setInitialTime(new Date().getTime());
-            }
         }
+        if(this.listItems.size() == 1857859){
+            return false;
 
+            }
+        return true;
     }
+
+
+
 
     public void stopThreads(){
         try {

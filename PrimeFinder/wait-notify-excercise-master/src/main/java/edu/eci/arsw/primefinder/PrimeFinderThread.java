@@ -21,6 +21,7 @@ public class PrimeFinderThread extends Thread{
 
 	@Override
 	public void run(){
+		//System.out.println("HILO: " + a);
 		try{
 			count();
 		}catch (InterruptedException e){
@@ -35,17 +36,22 @@ public class PrimeFinderThread extends Thread{
 					this.listItems.add(i);
 				}
 			}
-
 			// Thread.sleep(1000);
-			System.out.println("Time elapsed: " + (new Date().getTime() - initialTime));
-
+			//System.out.println("Time elapsed: " + (new Date().getTime() - initialTime));
+//			System.out.println(new Date().getTime());
 			if ((new Date().getTime() - initialTime) > this.sleepTime){
+//				System.out.println("Time elapsed: " + a + " " + (new Date().getTime() - initialTime));
+				System.out.println("Continue?");
 				synchronized (this.lock){
-					System.out.println("Hay un total de " + this.listItems.size() + " numeros primos en la lista: " + this.listItems + " Hay un total de "  + this.listItems.size() + " primos en la lista.");
+//					System.out.println("Hay un total de: " + this.listItems.size());
+//					System.out.println("Hay un total de " + this.listItems.size() + " numeros primos en la lista: " + this.listItems + " Hay un total de "  + this.listItems.size() + " primos en la lista.");
 					this.lock.wait();
 				}
+
 			}
+
 		}
+		System.out.println("END. ");
 
 	}
 

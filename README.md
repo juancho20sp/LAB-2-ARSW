@@ -40,6 +40,20 @@ Tenga en cuenta:
 -   La instrucción notifyAll(), despierta todos los hilos que estan
     esperando por el objeto (hicieron wait()sobre el objeto).
 
+#### Solucón Parte I
+    
+- Para que los hilos se detengan en cierto tiempo, cada hilo se hará cargo de detenerse al momento 
+  de llegar al tiempo estipulado. Al momento de llegar al tiempo, dentro de un _**bloque synchronized**_ 
+  se coloca la lista que se usa como "método de alerta entre el controlador y los hilos". 
+
+- En el Main, se hace un while true que mantiene el proceso alerta de una entrada de texto, esta será
+  para el momento en el que la ejecución de los hilos termine y se quiera reanudar. 
+
+- En el controlador, se añade el método **rerun()**, con este, cada vez que en el Main sé de a la tecla
+  **ENTER** se notificará a los hilos que se encuentran en espera para que comiencen nuevamente su ejecución. 
+
+- Funcionamiento: 
+
 
 ### Parte II
 
