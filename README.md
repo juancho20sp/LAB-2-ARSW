@@ -9,7 +9,7 @@ Ejercicio inividual o en parejas.
 
 ### Integrantes
 	Juan David Murillo Giraldo - 2172577
-	Laura Valentina Garcia Leon - 2160640 
+	Laura Valentina García León - 2160640 
 
 ### Repositorio
 https://github.com/juancho20sp/LAB-2-ARSW
