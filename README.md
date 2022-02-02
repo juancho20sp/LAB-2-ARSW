@@ -10,6 +10,13 @@ Ejercicio inividual o en parejas.
 
 ### Part I
 
+### Integrantes
+	Juan David Murillo Giraldo - 2172577
+	Laura Valentina Garcia Leon - 2160640 
+
+### Repositorio
+https://github.com/juancho20sp/LAB-2-ARSW
+
 
 Parte I – Antes de terminar la clase.
 
@@ -44,15 +51,23 @@ Tenga en cuenta:
     
 - Para que los hilos se detengan en cierto tiempo, cada hilo se hará cargo de detenerse al momento 
   de llegar al tiempo estipulado. Al momento de llegar al tiempo, dentro de un _**bloque synchronized**_ 
-  se coloca la lista que se usa como "método de alerta entre el controlador y los hilos". 
+  se coloca la lista que se usa como "método de alerta entre el controlador y los hilos".
+
+  ![Part1-1](img/parte1-1.png)
 
 - En el Main, se hace un while true que mantiene el proceso alerta de una entrada de texto, esta será
   para el momento en el que la ejecución de los hilos termine y se quiera reanudar. 
 
+  ![Part1-2](img/parte1-2.png)
+
 - En el controlador, se añade el método **rerun()**, con este, cada vez que en el Main sé de a la tecla
-  **ENTER** se notificará a los hilos que se encuentran en espera para que comiencen nuevamente su ejecución. 
+  **ENTER** se notificará a los hilos que se encuentran en espera para que comiencen nuevamente su ejecución.
+
+  ![Part1-3](img/parte1-3.png)
 
 - Funcionamiento: 
+
+  ![Part1-4](img/parte1-4.png)
 
 
 ### Parte II
